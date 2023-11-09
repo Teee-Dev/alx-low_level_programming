@@ -1,33 +1,26 @@
-#include "variadic_functions.h"
-#include <stdio.h>
-#include <stdarg.h>
+#include "function_pointers.h"
 
 /**
- * print_strings - Prints strings followed by a new line.
- * @separator: The string printed between strings (if not NULL).
- * @n: The number of strings passed to the function.
- * @...: A variable number of strings to be printed.
- *
- * Description: This function prints a variable number of strings (@n) with an
- * optional separator (@separator) between them. If separator is NULL, it is
- * not printed. If a string is NULL, "(nil)" is printed instead.
+ * int_index - Returns the index of the first element satisfying a condition.
+ * @array: Array of integers.
+ * @size: Number of elements in the array.
+ * @cmp: Pointer to a function that checks a condition on an integer.
+ * Description: This function searches for an element in the array (@array) of
+ * size (@size) for which the condition specified
+ * by the function (@cmp) is true.
+ * If such an element is found, the function returns its index. Otherwise, it
+ * returns -1. Returns -1 for invalid inputs.
  */
-void print_strings(const char *separator, const unsigned int n, ...)
+int int_index(int *array, int size, int (*cmp)(int))
 {
-va_list strings;
-char *str;
-unsigned int index;
-va_start(strings, n);
-for (index = 0; index < n; index++)
+int i;
+
+if (array == NULL || size <= 0 || cmp == NULL)
+return (-1);
+for (i = 0; i < size; i++)
 {
-str = va_arg(strings, char *);
-if (str == NULL)
-printf("(nil)");
-else
-printf("%s", str);
-if (index != (n - 1) && separator != NULL)
-printf("%s", separator);
+if (cmp(array[i]))
+return (i);
 }
-printf("\n");
-va_end(strings);
+return (-1);
 }
